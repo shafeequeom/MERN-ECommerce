@@ -1,4 +1,7 @@
 import { BrowserRouter as Router, useRoutes } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.min.css";
+
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import Home from "./pages/Home";
@@ -17,6 +20,7 @@ const AppWrapper = () => {
   return (
     <Router>
       <Header></Header>
+      <ToastContainer />
       <App />
     </Router>
   );

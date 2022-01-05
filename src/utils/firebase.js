@@ -1,8 +1,8 @@
-// const analytics = getAnalytics(app);
-import firebase from "firebase/app";
-import "firebase/auth";
+import firebase from "firebase/compat/app";
+import "firebase/compat/auth";
+import "firebase/compat/firestore";
 // firebase config
-const firebaseConfig = {
+const config = {
   apiKey: "AIzaSyA9P25x0W_fWTUUKar5nXhel63tO1-LE68",
   authDomain: "ecommerce-76b9b.firebaseapp.com",
   projectId: "ecommerce-76b9b",
@@ -13,7 +13,7 @@ const firebaseConfig = {
 };
 // initialize firebase app
 if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
+  firebase.initializeApp(config);
 }
 // export
 // export default firebase;
