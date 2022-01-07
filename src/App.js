@@ -4,6 +4,7 @@ import "react-toastify/dist/ReactToastify.min.css";
 
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
+import RegisterComplete from "./pages/auth/RegisterComplete";
 import Home from "./pages/Home";
 import Header from "./components/nav/Header";
 
@@ -12,6 +13,7 @@ const App = () => {
     { path: "/", element: <Home /> },
     { path: "/login", element: <Login /> },
     { path: "/register", element: <Register /> },
+    { path: "/register/complete", element: <RegisterComplete /> },
   ]);
   return routes;
 };

@@ -4,9 +4,6 @@ import { toast } from "react-toastify";
 
 const Register = () => {
   const [email, setEmail] = useState("");
-  //   const errorLog = () => {
-  //     console.log(process.env);
-  //   };
   const handleSubmit = async (e) => {
     e.preventDefault();
     const config = {
@@ -33,9 +30,9 @@ const Register = () => {
         autoFocus
         onChange={(e) => setEmail(e.target.value)}
       />
+      <br />
       <button className="btn btn-raised" type="submit">
-        {" "}
-        Register -- {email}
+        Register
       </button>
     </form>
   );
