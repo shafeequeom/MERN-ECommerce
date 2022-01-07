@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react";
 import { auth } from "../../utils/firebase";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const RegisterComplete = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     setEmail(window.localStorage.getItem("emailForRegistration"));
@@ -31,10 +34,11 @@ const RegisterComplete = () => {
         await user.updatePassword(password);
         const idTokenResult = await user.getIdTokenResult();
         console.log(user, idTokenResult);
+        navigate("/");
         toast.success("Success");
       }
     } catch (error) {
-      //console.log(error);
+      console.log(error);
       toast.error(error.message);
     }
   };
