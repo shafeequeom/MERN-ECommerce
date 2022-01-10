@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "antd";
 import { auth, googleAuthProvider } from "../../utils/firebase";
 import { toast } from "react-toastify";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { MailOutlined, GoogleOutlined } from "@ant-design/icons";
 
@@ -13,6 +13,12 @@ const Login = () => {
 
   let dispatch = useDispatch();
   const navigate = useNavigate();
+
+  let { user } = useSelector((state) => ({ ...state }));
+
+  useEffect(() => {
+    if (user && user.token) navigate("/");
+  }, [user, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

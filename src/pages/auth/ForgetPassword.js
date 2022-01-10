@@ -2,13 +2,20 @@ import { useState, useEffect } from "react";
 import { Button } from "antd";
 import { auth } from "../../utils/firebase";
 import { toast } from "react-toastify";
-import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { MailOutlined, GoogleOutlined } from "@ant-design/icons";
+import { MailOutlined } from "@ant-design/icons";
 
 const ForgetPassword = ({ history }) => {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
+
+  let { user } = useSelector((state) => ({ ...state }));
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user && user.token) navigate("/");
+  }, [user, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
