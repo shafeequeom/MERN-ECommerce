@@ -1,7 +1,8 @@
 import { BrowserRouter as Router, useRoutes } from "react-router-dom";
+import { useEffect } from "react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
-import { Provider, provider } from "react-redux";
+import { Provider } from "react-redux";
 import { createStore } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
 import rootReducer from "./reducer";
@@ -12,9 +13,32 @@ import RegisterComplete from "./pages/auth/RegisterComplete";
 import Home from "./pages/Home";
 import Header from "./components/nav/Header";
 
+import { auth } from "./utils/firebase";
+import { useDispatch } from "react-redux";
+
 const store = createStore(rootReducer, composeWithDevTools());
 
 const App = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        const idTokenResult = await user.getIdTokenResult();
+
+        dispatch({
+          type: "LOGGED_IN_USER",
+          payload: {
+            email: user.email,
+            token: idTokenResult.token,
+          },
+        });
+      }
+    });
+
+    return () => unsubscribe();
+  });
+
   let routes = useRoutes([
     { path: "/", element: <Home /> },
     { path: "/login", element: <Login /> },
