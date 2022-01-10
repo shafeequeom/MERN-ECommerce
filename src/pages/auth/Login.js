@@ -2,13 +2,37 @@ import { useState } from "react";
 import { Button } from "antd";
 import { auth } from "../../utils/firebase";
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("shafeequeom7@gmail.com");
+  const [password, setPassword] = useState("123456");
+
+  let dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    try {
+      const result = await auth.signInWithEmailAndPassword(email, password);
+      const { user } = result;
+      const idTokenResult = await user.getIdTokenResult();
+      dispatch({
+        type: "LOGGED_IN_USER",
+        payload: {
+          email: user.email,
+          token: idTokenResult,
+        },
+      });
+      toast.success("Login success");
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message);
+    }
   };
+
   const loginForm = () => (
     <form onSubmit={handleSubmit}>
       <div className="form-group">

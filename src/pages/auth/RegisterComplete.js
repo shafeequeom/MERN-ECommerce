@@ -2,12 +2,14 @@ import { useState, useEffect } from "react";
 import { auth } from "../../utils/firebase";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 const RegisterComplete = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const navigate = useNavigate();
+  let dispatch = useDispatch();
 
   useEffect(() => {
     setEmail(window.localStorage.getItem("emailForRegistration"));
@@ -33,9 +35,15 @@ const RegisterComplete = () => {
         let user = auth.currentUser;
         await user.updatePassword(password);
         const idTokenResult = await user.getIdTokenResult();
-        console.log(user, idTokenResult);
+        dispatch({
+          type: "LOGGED_IN_USER",
+          payload: {
+            email: user.email,
+            token: idTokenResult,
+          },
+        });
         navigate("/");
-        toast.success("Success");
+        toast.success("Success ");
       }
     } catch (error) {
       console.log(error);
