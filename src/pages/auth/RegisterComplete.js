@@ -51,12 +51,14 @@ const RegisterComplete = () => {
         className="form-control"
         disabled
       />
+      <br />
       <input
         type="password"
         name="password"
         value={password}
         className="form-control"
         autoFocus
+        placeholder="Please enter a password"
         onChange={(e) => setPassword(e.target.value)}
       />
       <br />
