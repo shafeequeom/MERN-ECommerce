@@ -10,6 +10,7 @@ import rootReducer from "./reducer";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import RegisterComplete from "./pages/auth/RegisterComplete";
+import ForgetPassword from "./pages/auth/ForgetPassword";
 import Home from "./pages/Home";
 import Header from "./components/nav/Header";
 
@@ -43,6 +44,7 @@ const App = () => {
     { path: "/", element: <Home /> },
     { path: "/login", element: <Login /> },
     { path: "/register", element: <Register /> },
+    { path: "/forget/password", element: <ForgetPassword /> },
     { path: "/register/complete", element: <RegisterComplete /> },
   ]);
   return routes;

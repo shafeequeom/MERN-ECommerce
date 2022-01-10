@@ -3,7 +3,7 @@ import { Button } from "antd";
 import { auth, googleAuthProvider } from "../../utils/firebase";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { MailOutlined, GoogleOutlined } from "@ant-design/icons";
 
 const Login = () => {
@@ -127,6 +127,9 @@ const Login = () => {
           >
             Login with Google
           </Button>
+          <Link to="/forget/password" className="text-danger float-right">
+            Forget Password
+          </Link>
         </div>
       </div>
     </div>
