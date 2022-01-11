@@ -5,6 +5,19 @@ import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { MailOutlined, GoogleOutlined } from "@ant-design/icons";
+import axios from "axios";
+
+const createOrUpdateUser = async (authToken) => {
+  return await axios.post(
+    process.env.REACT_APP_API_URL + "user",
+    {},
+    {
+      headers: {
+        authToken,
+      },
+    }
+  );
+};
 
 const Login = () => {
   const [email, setEmail] = useState("shafeequeom7@gmail.com");
@@ -31,9 +44,12 @@ const Login = () => {
         type: "LOGGED_IN_USER",
         payload: {
           email: user.email,
-          token: idTokenResult,
+          token: idTokenResult.token,
         },
       });
+      createOrUpdateUser(idTokenResult.token)
+        .then((res) => console.log(res))
+        .catch((err) => console.log(err));
       toast.success("Login success");
       navigate("/");
     } catch (error) {
