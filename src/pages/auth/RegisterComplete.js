@@ -3,6 +3,7 @@ import { auth } from "../../utils/firebase";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { createOrUpdateUser } from "../../functions";
 
 const RegisterComplete = () => {
   const [email, setEmail] = useState("");
@@ -35,15 +36,22 @@ const RegisterComplete = () => {
         let user = auth.currentUser;
         await user.updatePassword(password);
         const idTokenResult = await user.getIdTokenResult();
-        dispatch({
-          type: "LOGGED_IN_USER",
-          payload: {
-            email: user.email,
-            token: idTokenResult,
-          },
-        });
-        navigate("/");
-        toast.success("Success ");
+        createOrUpdateUser(idTokenResult.token)
+          .then((res) => {
+            dispatch({
+              type: "LOGGED_IN_USER",
+              payload: {
+                name: res.data.name,
+                email: user.email,
+                token: idTokenResult.token,
+                role: res.data.role,
+                _id: res.data._id,
+              },
+            });
+            toast.success("Registration success");
+            navigate("/");
+          })
+          .catch((err) => console.log(err));
       }
     } catch (error) {
       console.log(error);

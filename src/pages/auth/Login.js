@@ -5,19 +5,7 @@ import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { MailOutlined, GoogleOutlined } from "@ant-design/icons";
-import axios from "axios";
-
-const createOrUpdateUser = async (authToken) => {
-  return await axios.post(
-    process.env.REACT_APP_API_URL + "user",
-    {},
-    {
-      headers: {
-        authToken,
-      },
-    }
-  );
-};
+import { createOrUpdateUser } from "../../functions";
 
 const Login = () => {
   const [email, setEmail] = useState("shafeequeom7@gmail.com");
@@ -40,18 +28,24 @@ const Login = () => {
       const result = await auth.signInWithEmailAndPassword(email, password);
       const { user } = result;
       const idTokenResult = await user.getIdTokenResult();
-      dispatch({
-        type: "LOGGED_IN_USER",
-        payload: {
-          email: user.email,
-          token: idTokenResult.token,
-        },
-      });
+
       createOrUpdateUser(idTokenResult.token)
-        .then((res) => console.log(res))
+        .then((res) => {
+          dispatch({
+            type: "LOGGED_IN_USER",
+            payload: {
+              name: res.data.name,
+              email: user.email,
+              token: idTokenResult.token,
+              role: res.data.role,
+              _id: res.data._id,
+            },
+          });
+          toast.success("Login success");
+          setLoading(false);
+          navigate("/");
+        })
         .catch((err) => console.log(err));
-      toast.success("Login success");
-      navigate("/");
     } catch (error) {
       setLoading(false);
       console.log(error);
@@ -67,16 +61,23 @@ const Login = () => {
       .then(async (result) => {
         const { user } = result;
         const idTokenResult = await user.getIdTokenResult();
-        dispatch({
-          type: "LOGGED_IN_USER",
-          payload: {
-            email: user.email,
-            token: idTokenResult,
-          },
-        });
-        toast.success("Login success");
-        setLoading(false);
-        navigate("/");
+        createOrUpdateUser(idTokenResult.token)
+          .then((res) => {
+            dispatch({
+              type: "LOGGED_IN_USER",
+              payload: {
+                name: res.data.name,
+                email: user.email,
+                token: idTokenResult.token,
+                role: res.data.role,
+                _id: res.data._id,
+              },
+            });
+            setLoading(false);
+            toast.success("Login success");
+            navigate("/");
+          })
+          .catch((err) => console.log(err));
       })
       .catch((error) => {
         setLoading(false);
