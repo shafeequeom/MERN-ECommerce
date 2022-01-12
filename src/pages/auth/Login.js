@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { MailOutlined, GoogleOutlined } from "@ant-design/icons";
-import { createOrUpdateUser } from "../../functions";
+import { createOrUpdateUser } from "../../functions/auth";
 
 const Login = () => {
   const [email, setEmail] = useState("shafeequeom7@gmail.com");
@@ -73,8 +73,8 @@ const Login = () => {
                 _id: res.data._id,
               },
             });
-            setLoading(false);
             toast.success("Login success");
+            setLoading(false);
             navigate("/");
           })
           .catch((err) => console.log(err));

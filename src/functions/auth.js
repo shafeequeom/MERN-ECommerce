@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const createOrUpdateUser = async (authToken) => {
+export const createOrUpdateUser = async (authToken) => {
   return await axios.post(
     process.env.REACT_APP_API_URL + "user",
     {},
@@ -12,4 +12,14 @@ const createOrUpdateUser = async (authToken) => {
   );
 };
 
-export default createOrUpdateUser;
+export const currentUser = async (authToken) => {
+  return await axios.post(
+    process.env.REACT_APP_API_URL + "user/current",
+    {},
+    {
+      headers: {
+        authToken,
+      },
+    }
+  );
+};
