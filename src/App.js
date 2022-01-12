@@ -7,11 +7,8 @@ import { createStore } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
 import rootReducer from "./reducer";
 
-import Login from "./pages/auth/Login";
-import Register from "./pages/auth/Register";
-import RegisterComplete from "./pages/auth/RegisterComplete";
-import ForgetPassword from "./pages/auth/ForgetPassword";
-import Home from "./pages/Home";
+import routes from "./router";
+
 import Header from "./components/nav/Header";
 
 import { auth } from "./utils/firebase";
@@ -48,16 +45,9 @@ const App = () => {
     });
     // cleanup
     return () => unsubscribe();
-  }, []);
+  });
 
-  let routes = useRoutes([
-    { path: "/", element: <Home /> },
-    { path: "/login", element: <Login /> },
-    { path: "/register", element: <Register /> },
-    { path: "/forget/password", element: <ForgetPassword /> },
-    { path: "/register/complete", element: <RegisterComplete /> },
-  ]);
-  return routes;
+  return useRoutes(routes);
 };
 
 const AppWrapper = () => {

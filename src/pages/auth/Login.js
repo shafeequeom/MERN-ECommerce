@@ -21,6 +21,14 @@ const Login = () => {
     if (user && user.token) navigate("/");
   }, [user, navigate]);
 
+  const roleBasedRedirect = (res) => {
+    if (res.data.data === "admin") {
+      navigate("admin/dashboard");
+    } else {
+      navigate("/");
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -75,7 +83,8 @@ const Login = () => {
             });
             toast.success("Login success");
             setLoading(false);
-            navigate("/");
+            // navigate("/");
+            roleBasedRedirect();
           })
           .catch((err) => console.log(err));
       })
