@@ -12,13 +12,15 @@ import routes from "./router";
 import Header from "./components/nav/Header";
 
 import { auth } from "./utils/firebase";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { currentUser } from "./functions/auth";
 
 const store = createStore(rootReducer, composeWithDevTools());
 
 const App = () => {
   const dispatch = useDispatch();
+
+  const { user } = useSelector((state) => ({ ...state }));
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
@@ -45,9 +47,9 @@ const App = () => {
     });
     // cleanup
     return () => unsubscribe();
-  });
+  }, []);
 
-  return useRoutes(routes);
+  return useRoutes(routes(user && user.token));
 };
 
 const AppWrapper = () => {
