@@ -1,4 +1,3 @@
-import { Navigate } from "react-router-dom";
 import Redirection from "../components/redirect/Redirection";
 
 import Login from "../pages/auth/Login";
@@ -8,6 +7,8 @@ import ForgetPassword from "../pages/auth/ForgetPassword";
 import Home from "../pages/Home";
 
 import History from "../pages/user/History";
+import Password from "../pages/user/Password";
+import Wishlist from "../pages/user/Wishlist";
 
 const routes = (isLoggedIn) => [
   //Auth
@@ -21,6 +22,14 @@ const routes = (isLoggedIn) => [
   {
     path: "/user/history",
     element: isLoggedIn ? <History /> : <Redirection />,
+  },
+  {
+    path: "/user/password",
+    element: isLoggedIn ? <Password /> : <Redirection />,
+  },
+  {
+    path: "/user/wishlist",
+    element: isLoggedIn ? <Wishlist /> : <Redirection />,
   },
 ];
 
