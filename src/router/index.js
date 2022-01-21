@@ -16,8 +16,8 @@ const routes = (isLoggedIn) => [
   { path: "/register", element: <Register /> },
   { path: "/forget/password", element: <ForgetPassword /> },
   { path: "/register/complete", element: <RegisterComplete /> },
-  //User
 
+  //User
   {
     path: "/user/history",
     element: isLoggedIn ? <History /> : <Redirection />,
