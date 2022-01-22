@@ -63,7 +63,7 @@ const Header = () => {
           style={{ marginLeft: "auto" }}
           key="setting"
           icon={<SettingOutlined />}
-          title={user.email.split("@")[0]}
+          title={user.email ? user.email.split("@")[0] : "user"}
         >
           <Menu.ItemGroup title="Item 1">
             <Item key="setting:1" icon={<UserAddOutlined />}>

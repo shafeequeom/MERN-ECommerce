@@ -21,6 +21,8 @@ const App = () => {
   const dispatch = useDispatch();
 
   const { user } = useSelector((state) => ({ ...state }));
+  const isLoggedIn = user && user.token;
+  const isAdmin = user && user.role && user.role === "admin";
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
@@ -49,7 +51,7 @@ const App = () => {
     return () => unsubscribe();
   }, []);
 
-  return useRoutes(routes(user && user.token));
+  return useRoutes(routes(isLoggedIn, isAdmin));
 };
 
 const AppWrapper = () => {

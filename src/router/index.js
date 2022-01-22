@@ -10,7 +10,9 @@ import History from "../pages/user/History";
 import Password from "../pages/user/Password";
 import Wishlist from "../pages/user/Wishlist";
 
-const routes = (isLoggedIn) => [
+import AdminDashboard from "../pages/admin/AdminDashboard";
+
+const routes = (isLoggedIn, isAdmin) => [
   //Auth
   { path: "/", element: <Home /> },
   { path: "/login", element: <Login /> },
@@ -30,6 +32,12 @@ const routes = (isLoggedIn) => [
   {
     path: "/user/wishlist",
     element: isLoggedIn ? <Wishlist /> : <Redirection />,
+  },
+
+  //admin
+  {
+    path: "/admin/dashboard",
+    element: isLoggedIn && isAdmin ? <AdminDashboard /> : <Redirection />,
   },
 ];
 
