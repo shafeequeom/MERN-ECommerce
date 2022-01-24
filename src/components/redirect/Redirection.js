@@ -14,7 +14,7 @@ const Redirection = () => {
     count === 0 && navigate("/login");
 
     return () => clearInterval(interval);
-  }, [count]);
+  }, [count, navigate]);
   return (
     <div className="container-fluid">
       <div className="row">

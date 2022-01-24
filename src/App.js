@@ -49,7 +49,7 @@ const App = () => {
     });
     // cleanup
     return () => unsubscribe();
-  }, []);
+  }, [dispatch]);
 
   return useRoutes(routes(isLoggedIn, isAdmin));
 };
