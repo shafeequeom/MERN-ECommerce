@@ -6,6 +6,7 @@ import {
   UserAddOutlined,
   UserOutlined,
   LogoutOutlined,
+  DashboardOutlined,
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import firebase from "firebase/compat/app";
@@ -66,12 +67,16 @@ const Header = () => {
           title={user.email ? user.email.split("@")[0] : "user"}
         >
           <Menu.ItemGroup title="Item 1">
-            <Item key="setting:1" icon={<UserAddOutlined />}>
-              Register
-            </Item>
-            <Item key="setting:2" icon={<UserOutlined />}>
-              Login
-            </Item>
+            {user && user.role === "subscriber" && (
+              <Item key="setting:1" icon={<DashboardOutlined />}>
+                <Link to="/user/history">Dashboard</Link>
+              </Item>
+            )}
+            {user && user.role === "admin" && (
+              <Item key="setting:2" icon={<DashboardOutlined />}>
+                <Link to="/admin/dashboard">Dashboard</Link>
+              </Item>
+            )}
             <Item key="setting:3" icon={<LogoutOutlined />} onClick={logOut}>
               Logout
             </Item>

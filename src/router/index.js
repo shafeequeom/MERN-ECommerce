@@ -11,6 +11,8 @@ import Password from "../pages/user/Password";
 import Wishlist from "../pages/user/Wishlist";
 
 import AdminDashboard from "../pages/admin/AdminDashboard";
+import CategoryCreate from "../pages/admin/category/CategoryCreate";
+import CategoryUpdate from "../pages/admin/category/CategoryUpdate";
 
 const routes = (isLoggedIn, isAdmin) => [
   //Auth
@@ -38,6 +40,14 @@ const routes = (isLoggedIn, isAdmin) => [
   {
     path: "/admin/dashboard",
     element: isLoggedIn && isAdmin ? <AdminDashboard /> : <Redirection />,
+  },
+  {
+    path: "/admin/category",
+    element: isLoggedIn && isAdmin ? <CategoryCreate /> : <Redirection />,
+  },
+  {
+    path: "/admin/category/:slug",
+    element: isLoggedIn && isAdmin ? <CategoryUpdate /> : <Redirection />,
   },
 ];
 
