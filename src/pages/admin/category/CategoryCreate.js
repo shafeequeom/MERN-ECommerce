@@ -9,6 +9,8 @@ import {
 } from "../../../functions/category";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
+import CategoryForm from "../../../components/forms/CategoryForm";
+import LocalSearch from "../../../components/forms/LocalSearch";
 
 const CategoryCreate = () => {
   const { user } = useSelector((state) => ({ ...state }));
@@ -16,6 +18,8 @@ const CategoryCreate = () => {
   const [name, setName] = useState("");
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  const [keyword, setKeyword] = useState("");
 
   useEffect(() => {
     loadCategories();
@@ -59,27 +63,8 @@ const CategoryCreate = () => {
     }
   };
 
-  const categoryForm = () => (
-    <form>
-      <div className="form-group">
-        <label>Name</label>
-        <input
-          type="text"
-          className="form-control"
-          onChange={(e) => {
-            setName(e.target.value);
-          }}
-          value={name}
-          autoFocus
-          required
-        />
-        <br />
-        <button className="btn btn-outline-primary" onClick={handleSubmit}>
-          Save
-        </button>
-      </div>
-    </form>
-  );
+  const searched = (keyword) => (c) => c.name.toLowerCase().includes(keyword);
+
   return (
     <div className="container-fluid">
       <div className="row">
@@ -92,9 +77,17 @@ const CategoryCreate = () => {
           ) : (
             <p>Create category</p>
           )}
-          {categoryForm()}
+          <CategoryForm
+            handleSubmit={handleSubmit}
+            name={name}
+            setName={setName}
+          ></CategoryForm>
           <br />
-          {categories.map((category) => {
+
+          <LocalSearch keyword={keyword} setKeyword={setKeyword}></LocalSearch>
+
+          <br />
+          {categories.filter(searched(keyword)).map((category) => {
             return (
               <div className="alert alert-secondary" key={category._id}>
                 {category.name}
