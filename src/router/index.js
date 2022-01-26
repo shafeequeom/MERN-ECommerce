@@ -13,6 +13,8 @@ import Wishlist from "../pages/user/Wishlist";
 import AdminDashboard from "../pages/admin/AdminDashboard";
 import CategoryCreate from "../pages/admin/category/CategoryCreate";
 import CategoryUpdate from "../pages/admin/category/CategoryUpdate";
+import SubCategoryCreate from "../pages/admin/sub/SubCategoryCreate";
+import SubCategoryUpdate from "../pages/admin/sub/SubCategoryUpdate";
 
 const routes = (isLoggedIn, isAdmin) => [
   //Auth
@@ -48,6 +50,14 @@ const routes = (isLoggedIn, isAdmin) => [
   {
     path: "/admin/category/:slug",
     element: isLoggedIn && isAdmin ? <CategoryUpdate /> : <Redirection />,
+  },
+  {
+    path: "/admin/sub",
+    element: isLoggedIn && isAdmin ? <SubCategoryCreate /> : <Redirection />,
+  },
+  {
+    path: "/admin/sub/:slug",
+    element: isLoggedIn && isAdmin ? <SubCategoryUpdate /> : <Redirection />,
   },
 ];
 
