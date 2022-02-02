@@ -3,6 +3,10 @@ import AdminNav from "../../../components/nav/AdminNav";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { addProduct } from "../../../functions/product";
+import {
+  getCategoriesList,
+  getCategorySubs,
+} from "../../../functions/category";
 import ProductForm from "../../../components/forms/ProductForm";
 
 const initialState = {
@@ -11,7 +15,7 @@ const initialState = {
   price: "",
   category: "",
   categories: [],
-  subCategory: [],
+  subCategories: [],
   shipping: "Yes",
   quantity: "",
   images: [],
@@ -25,6 +29,22 @@ const ProductCreate = () => {
   const { user } = useSelector((state) => ({ ...state }));
 
   const [value, setValue] = useState(initialState);
+  const [subOptions, setSubOptions] = useState([]);
+
+  useEffect(() => {
+    loadCategories();
+  }, []);
+
+  const loadCategories = () => {
+    getCategoriesList().then((res) =>
+      setValue({ ...value, categories: res.data })
+    );
+  };
+
+  const loadSubCategories = (_id) => {
+    console.log(_id);
+    getCategorySubs(_id).then((res) => setSubOptions(res.data));
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -44,6 +64,13 @@ const ProductCreate = () => {
     setValue({ ...value, [e.target.name]: e.target.value });
   };
 
+  const handleCategoryChange = (e) => {
+    e.preventDefault();
+    setValue({ ...value, [e.target.name]: e.target.value });
+    console.log(value.category);
+    loadSubCategories(e.target.value);
+  };
+
   return (
     <div className="container-fluid">
       <div className="row">
@@ -54,8 +81,11 @@ const ProductCreate = () => {
           <h1>Product Create</h1>
           <ProductForm
             handleChange={handleChange}
+            handleCategoryChange={handleCategoryChange}
             handleSubmit={handleSubmit}
+            setValue={setValue}
             value={value}
+            subOptions={subOptions}
           ></ProductForm>
         </div>
       </div>

@@ -61,7 +61,7 @@ const routes = (isLoggedIn, isAdmin) => [
     element: isLoggedIn && isAdmin ? <SubCategoryUpdate /> : <Redirection />,
   },
   {
-    path: "/admin/products",
+    path: "/admin/product",
     element: isLoggedIn && isAdmin ? <ProductCreate /> : <Redirection />,
   },
 ];

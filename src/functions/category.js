@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const getCategoriesLit = async () => {
+export const getCategoriesList = async () => {
   return await axios.get(process.env.REACT_APP_API_URL + "categories");
 };
 
@@ -36,5 +36,11 @@ export const removeCategory = async (slug, authToken) => {
         authToken,
       },
     }
+  );
+};
+
+export const getCategorySubs = async (_id) => {
+  return await axios.get(
+    process.env.REACT_APP_API_URL + `category/subs/${_id}`
   );
 };

@@ -1,11 +1,22 @@
-const ProductForm = ({ handleSubmit, handleChange, value }) => {
+import { Select } from "antd";
+
+const { Option } = Select;
+
+const ProductForm = ({
+  handleSubmit,
+  handleChange,
+  handleCategoryChange,
+  subOptions,
+  setValue,
+  value,
+}) => {
   const {
     title,
     description,
     price,
     categories,
     category,
-    subCategory,
+    subCategories,
     shipping,
     quantity,
     images,
@@ -100,6 +111,42 @@ const ProductForm = ({ handleSubmit, handleChange, value }) => {
               </option>
             ))}
           </select>
+        </div>
+        <div className="form-group">
+          <label>Category</label>
+          <select
+            name="category"
+            className="form-control"
+            value={category}
+            onChange={handleCategoryChange}
+          >
+            <option value="">Please Select</option>
+            {categories.map((c) => (
+              <option value={c._id} key={c._id}>
+                {c.name}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="form-group">
+          <label>Sub Category</label>
+          <Select
+            name="subCategory"
+            mode="multiple"
+            style={{ width: "100%" }}
+            placeholder="Select sub-categories"
+            value={subCategories}
+            onChange={(v) => {
+              setValue({ ...value, subCategories: v });
+            }}
+          >
+            <Option value="">Please Select</Option>
+            {subOptions.map((c) => (
+              <Option value={c._id} key={c._id}>
+                {c.name}
+              </Option>
+            ))}
+          </Select>
         </div>
 
         <button className="btn btn-outline-info">Save</button>

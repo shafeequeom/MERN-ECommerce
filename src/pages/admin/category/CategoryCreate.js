@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import {
   addCategory,
-  getCategoriesLit,
+  getCategoriesList,
   removeCategory,
 } from "../../../functions/category";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
@@ -26,7 +26,7 @@ const CategoryCreate = () => {
   }, []);
 
   const loadCategories = () => {
-    getCategoriesLit().then((res) => setCategories(res.data));
+    getCategoriesList().then((res) => setCategories(res.data));
   };
 
   const handleSubmit = (e) => {

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import AdminNav from "../../../components/nav/AdminNav";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
-import { getCategoriesLit } from "../../../functions/category";
+import { getCategoriesList } from "../../../functions/category";
 import {
   getSubCategory,
   updateSubCategory,
@@ -26,7 +26,7 @@ const SubCategoryCreate = () => {
   }, [slug]);
 
   const loadCategories = () => {
-    getCategoriesLit().then((res) => setCategories(res.data));
+    getCategoriesList().then((res) => setCategories(res.data));
   };
 
   const loadSubCategory = (slug) => {
