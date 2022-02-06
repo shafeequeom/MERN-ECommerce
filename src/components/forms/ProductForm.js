@@ -8,6 +8,7 @@ const ProductForm = ({
   handleCategoryChange,
   subOptions,
   setValue,
+  showSub,
   value,
 }) => {
   const {
@@ -19,7 +20,6 @@ const ProductForm = ({
     subCategories,
     shipping,
     quantity,
-    images,
     colors,
     brands,
     color,
@@ -128,26 +128,28 @@ const ProductForm = ({
             ))}
           </select>
         </div>
-        <div className="form-group">
-          <label>Sub Category</label>
-          <Select
-            name="subCategory"
-            mode="multiple"
-            style={{ width: "100%" }}
-            placeholder="Select sub-categories"
-            value={subCategories}
-            onChange={(v) => {
-              setValue({ ...value, subCategories: v });
-            }}
-          >
-            <Option value="">Please Select</Option>
-            {subOptions.map((c) => (
-              <Option value={c._id} key={c._id}>
-                {c.name}
-              </Option>
-            ))}
-          </Select>
-        </div>
+        {showSub && (
+          <div className="form-group">
+            <label>Sub Category</label>
+            <Select
+              name="subCategory"
+              mode="multiple"
+              style={{ width: "100%" }}
+              placeholder="Select sub-categories"
+              value={subCategories}
+              onChange={(v) => {
+                setValue({ ...value, subCategories: v });
+              }}
+            >
+              <Option value="">Please Select</Option>
+              {subOptions.map((c) => (
+                <Option value={c._id} key={c._id}>
+                  {c.name}
+                </Option>
+              ))}
+            </Select>
+          </div>
+        )}
 
         <button className="btn btn-outline-info">Save</button>
       </form>

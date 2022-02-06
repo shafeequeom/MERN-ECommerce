@@ -8,6 +8,7 @@ import {
   getCategorySubs,
 } from "../../../functions/category";
 import ProductForm from "../../../components/forms/ProductForm";
+import ImageUpload from "../../../components/forms/ImageUpload";
 
 const initialState = {
   title: "",
@@ -28,12 +29,10 @@ const initialState = {
 const ProductCreate = () => {
   const { user } = useSelector((state) => ({ ...state }));
 
+  const [showSub, setShowSub] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [value, setValue] = useState(initialState);
   const [subOptions, setSubOptions] = useState([]);
-
-  useEffect(() => {
-    loadCategories();
-  }, []);
 
   const loadCategories = () => {
     getCategoriesList().then((res) =>
@@ -41,20 +40,30 @@ const ProductCreate = () => {
     );
   };
 
+  useEffect(() => {
+    loadCategories();
+  }, []);
+
   const loadSubCategories = (_id) => {
-    console.log(_id);
-    getCategorySubs(_id).then((res) => setSubOptions(res.data));
+    setShowSub(false);
+    getCategorySubs(_id).then(
+      (res) => setSubOptions(res.data),
+      setShowSub(true)
+    );
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setLoading(true);
     addProduct(value, user.token)
       .then((res) => {
+        setLoading(false);
         toast.success(`${res.data.title} created successfully`);
         setValue(initialState);
       })
       .catch((err) => {
         console.log(err);
+        setLoading(false);
         if (err.response.status === 400) toast.error(err.response.data.err);
         else toast.error("Error creating product");
       });
@@ -66,7 +75,7 @@ const ProductCreate = () => {
 
   const handleCategoryChange = (e) => {
     e.preventDefault();
-    setValue({ ...value, [e.target.name]: e.target.value });
+    setValue({ ...value, subs: [], [e.target.name]: e.target.value });
     console.log(value.category);
     loadSubCategories(e.target.value);
   };
@@ -78,13 +87,21 @@ const ProductCreate = () => {
           <AdminNav></AdminNav>
         </div>
         <div className="col">
-          <h1>Product Create</h1>
+          {loading ? <h1>Saving</h1> : <h1>Product Create</h1>}
+          <div className="pa-2">
+            <ImageUpload
+              value={value}
+              setValue={setValue}
+              setLoading={setLoading}
+            ></ImageUpload>
+          </div>
           <ProductForm
             handleChange={handleChange}
             handleCategoryChange={handleCategoryChange}
             handleSubmit={handleSubmit}
             setValue={setValue}
             value={value}
+            showSub={showSub}
             subOptions={subOptions}
           ></ProductForm>
         </div>
