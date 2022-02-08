@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { getProductsByCount } from "../functions/product";
 import ProductCard from "../components/cards/ProductCard";
 import Jumbrotron from "../components/cards/Jumbrotron";
+import LoadingCard from "../components/cards/LoadingCard";
 
 const Home = () => {
   const [products, setProducts] = useState([]);
@@ -35,13 +36,17 @@ const Home = () => {
         </h1>
       </div>
       <div className="container">
-        <div className="row">
-          {products.map((product) => (
-            <div className="col-md-4" key={product._id}>
-              <ProductCard product={product}></ProductCard>
-            </div>
-          ))}
-        </div>
+        {!loading ? (
+          <div className="row">
+            {products.map((product) => (
+              <div className="col-md-4" key={product._id}>
+                <ProductCard product={product}></ProductCard>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <LoadingCard count={3} />
+        )}
       </div>
     </div>
   );
