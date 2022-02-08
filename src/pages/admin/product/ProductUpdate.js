@@ -1,33 +1,32 @@
 import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import AdminNav from "../../../components/nav/AdminNav";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
-import { addProduct } from "../../../functions/product";
+import { getProduct, updateProduct } from "../../../functions/product";
 import {
   getCategoriesList,
   getCategorySubs,
 } from "../../../functions/category";
 import ProductForm from "../../../components/forms/ProductForm";
 import ImageUpload from "../../../components/forms/ImageUpload";
-import { useNavigate } from "react-router-dom";
 
 const initialState = {
   title: "",
   description: "",
   price: "",
   category: "",
-  categories: [],
   subCategories: [],
-  shipping: "Yes",
+  shipping: "",
   quantity: "",
   images: [],
   colors: ["Black", "Brown", "Silver", "White", "Blue"],
   brands: ["Apple", "Samsung", "Microsoft", "Lenovo", "ASUS"],
-  color: "White",
-  brand: "Apple",
+  color: "",
+  brand: "",
 };
 
-const ProductCreate = () => {
+const ProductUpdate = (props) => {
   const { user } = useSelector((state) => ({ ...state }));
 
   const [showSub, setShowSub] = useState(false);
@@ -37,12 +36,39 @@ const ProductCreate = () => {
   const [categories, setCategories] = useState([]);
   let navigate = useNavigate();
 
+  const { slug } = useParams();
+
+  const loadProduct = () => {
+    setLoading(true);
+    getProduct(slug)
+      .then((res) => {
+        setLoading(false);
+        let data = res.data;
+        if (data.category) {
+          data.originalCategory = data.category._id;
+          data.category = data.category._id;
+          loadSubCategories(data.category);
+        }
+        if (data.subCategories.length) {
+          setShowSub(true);
+          let subCategories = data.subCategories.map((item) => item._id);
+          data.originalSubCategories = subCategories;
+          data.subCategories = subCategories;
+        }
+        setValue({ ...value, ...data });
+        loadCategories();
+      })
+      .catch((err) => console.log(err));
+  };
+
   const loadCategories = () => {
-    getCategoriesList().then((res) => setCategories(res.data));
+    getCategoriesList().then((res) => {
+      setCategories(res.data);
+    });
   };
 
   useEffect(() => {
-    loadCategories();
+    loadProduct();
   }, []);
 
   const loadSubCategories = (_id) => {
@@ -56,18 +82,17 @@ const ProductCreate = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
-    addProduct(value, user.token)
+    updateProduct(slug, value, user.token)
       .then((res) => {
         setLoading(false);
-        toast.success(`${res.data.title} created successfully`);
-        setValue(initialState);
+        toast.success(`${res.data.title} updated successfully`);
         navigate("/admin/products");
       })
       .catch((err) => {
         console.log(err);
         setLoading(false);
         if (err.response.status === 400) toast.error(err.response.data.err);
-        else toast.error("Error creating product");
+        else toast.error("Error updating product");
       });
   };
 
@@ -77,8 +102,11 @@ const ProductCreate = () => {
 
   const handleCategoryChange = (e) => {
     e.preventDefault();
-    setValue({ ...value, subs: [], [e.target.name]: e.target.value });
-    console.log(value.category);
+    let newValue = e.target.value;
+    setValue({ ...value, subCategories: [], [e.target.name]: newValue });
+    if (newValue === value.originalCategory) {
+      setValue({ ...value, subCategories: value.originalSubCategories });
+    }
     loadSubCategories(e.target.value);
   };
 
@@ -89,7 +117,8 @@ const ProductCreate = () => {
           <AdminNav></AdminNav>
         </div>
         <div className="col">
-          {loading ? <h1>Saving</h1> : <h1>Product Create</h1>}
+          {loading ? <h1>Updating</h1> : <h1>Product Create</h1>}
+          <br />
           <div className="pa-2">
             <ImageUpload
               value={value}
@@ -113,4 +142,4 @@ const ProductCreate = () => {
   );
 };
 
-export default ProductCreate;
+export default ProductUpdate;

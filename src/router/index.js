@@ -17,6 +17,7 @@ import SubCategoryCreate from "../pages/admin/sub/SubCategoryCreate";
 import SubCategoryUpdate from "../pages/admin/sub/SubCategoryUpdate";
 import ProductCreate from "../pages/admin/product/ProductCreate";
 import AllProducts from "../pages/admin/product/AllProducts";
+import ProductUpdate from "../pages/admin/product/ProductUpdate";
 
 const routes = (isLoggedIn, isAdmin) => [
   //Auth
@@ -68,6 +69,10 @@ const routes = (isLoggedIn, isAdmin) => [
   {
     path: "/admin/products",
     element: isLoggedIn && isAdmin ? <AllProducts /> : <Redirection />,
+  },
+  {
+    path: "/admin/product/:slug",
+    element: isLoggedIn && isAdmin ? <ProductUpdate /> : <Redirection />,
   },
 ];
 

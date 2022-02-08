@@ -9,13 +9,13 @@ const ProductForm = ({
   subOptions,
   setValue,
   showSub,
+  categories,
   value,
 }) => {
   const {
     title,
     description,
     price,
-    categories,
     category,
     subCategories,
     shipping,

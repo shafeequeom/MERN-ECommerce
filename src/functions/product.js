@@ -19,3 +19,23 @@ export const removeProduct = async (slug, authToken) => {
     },
   });
 };
+
+export const getProduct = async (slug, authToken) => {
+  return await axios.get(`${process.env.REACT_APP_API_URL}product/${slug}`, {
+    headers: {
+      authToken,
+    },
+  });
+};
+
+export const updateProduct = async (slug, form, authToken) => {
+  return await axios.put(
+    `${process.env.REACT_APP_API_URL}product/${slug}`,
+    form,
+    {
+      headers: {
+        authToken,
+      },
+    }
+  );
+};
