@@ -7,3 +7,7 @@ export const addProduct = async (form, authToken) => {
     },
   });
 };
+
+export const getProductsByCount = async (count) => {
+  return await axios.get(`${process.env.REACT_APP_API_URL}/products/${count}`);
+};

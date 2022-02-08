@@ -64,7 +64,7 @@ const ImageUpload = ({ value, setValue, setLoading }) => {
       .then((res) => {
         console.log(res);
         const { images } = value;
-        let filteredImages = images.filter((item) => item.public_id != id);
+        let filteredImages = images.filter((item) => item.public_id !== id);
         setValue({ ...value, images: filteredImages });
         setLoading(false);
       })
