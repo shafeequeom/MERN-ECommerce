@@ -9,5 +9,13 @@ export const addProduct = async (form, authToken) => {
 };
 
 export const getProductsByCount = async (count) => {
-  return await axios.get(`${process.env.REACT_APP_API_URL}/products/${count}`);
+  return await axios.get(`${process.env.REACT_APP_API_URL}products/${count}`);
+};
+
+export const removeProduct = async (slug, authToken) => {
+  return await axios.delete(`${process.env.REACT_APP_API_URL}product/${slug}`, {
+    headers: {
+      authToken,
+    },
+  });
 };
