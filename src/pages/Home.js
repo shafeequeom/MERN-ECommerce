@@ -1,8 +1,50 @@
+import { useEffect, useState } from "react";
+import { getProductsByCount } from "../functions/product";
+import ProductCard from "../components/cards/ProductCard";
+import Jumbrotron from "../components/cards/Jumbrotron";
 
 const Home = () => {
-    return (
-        <div>Home</div>
-    )
-}
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-export default Home
+  useEffect(() => {
+    loadAllProducts();
+  }, []);
+
+  const loadAllProducts = () => {
+    setLoading(true);
+    getProductsByCount(10)
+      .then((res) => {
+        setProducts(res.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setLoading(false);
+      });
+  };
+  return (
+    <div className="">
+      <div className="jumbotron ">
+        <h1 className="text-danger text-center font-weight-bold">
+          {loading ? (
+            "Loading.."
+          ) : (
+            <Jumbrotron text={["New Arrivals", "Best Settlers"]} />
+          )}
+        </h1>
+      </div>
+      <div className="container">
+        <div className="row">
+          {products.map((product) => (
+            <div className="col-md-4" key={product._id}>
+              <ProductCard product={product}></ProductCard>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Home;
