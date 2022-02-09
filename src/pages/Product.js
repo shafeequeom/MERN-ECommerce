@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import SingleProduct from "../components/cards/SingleProduct";
 import { getProduct } from "../functions/product";
 
 export const Product = () => {
@@ -13,7 +14,6 @@ export const Product = () => {
       .then((res) => {
         setLoading(false);
         let data = res.data;
-
         setProduct(data);
       })
       .catch((err) => console.log(err));
@@ -23,5 +23,18 @@ export const Product = () => {
     loadProduct();
   }, []);
 
-  return <div>{JSON.stringify(product)}</div>;
+  return (
+    <div className="container-fluid p-4">
+      <SingleProduct product={product}></SingleProduct>
+      <div className="row">
+        <div className="col text-center pt-5 pb-5">
+          <hr />
+          Related Products
+          <hr />
+        </div>
+      </div>
+    </div>
+  );
 };
+
+export default Product;

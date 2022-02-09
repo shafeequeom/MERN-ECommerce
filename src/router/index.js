@@ -5,6 +5,7 @@ import Register from "../pages/auth/Register";
 import RegisterComplete from "../pages/auth/RegisterComplete";
 import ForgetPassword from "../pages/auth/ForgetPassword";
 import Home from "../pages/Home";
+import Product from "../pages/Product";
 
 import History from "../pages/user/History";
 import Password from "../pages/user/Password";
@@ -22,6 +23,7 @@ import ProductUpdate from "../pages/admin/product/ProductUpdate";
 const routes = (isLoggedIn, isAdmin) => [
   //Auth
   { path: "/", element: <Home /> },
+  { path: "/products/:slug", element: <Product /> },
   { path: "/login", element: <Login /> },
   { path: "/register", element: <Register /> },
   { path: "/forget/password", element: <ForgetPassword /> },
