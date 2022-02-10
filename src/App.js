@@ -24,6 +24,20 @@ const App = () => {
   const isLoggedIn = user && user.token;
   const isAdmin = user && user.role && user.role === "admin";
 
+  // eslint-disable-next-line
+  const consoleError = console.error.bind(console);
+  // eslint-disable-next-line
+  console.error = (errObj, ...args) => {
+    if (
+      process.env.NODE_ENV === "development" &&
+      typeof errObj.message === "string" &&
+      args.includes("findDOMNode")
+    ) {
+      return;
+    }
+    consoleError(errObj, ...args);
+  };
+
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user) {

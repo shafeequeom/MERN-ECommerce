@@ -3,7 +3,7 @@ import { Button } from "antd";
 import { auth, googleAuthProvider } from "../../utils/firebase";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { MailOutlined, GoogleOutlined } from "@ant-design/icons";
 import { createOrUpdateUser } from "../../functions/auth";
 
@@ -14,14 +14,26 @@ const Login = () => {
 
   let dispatch = useDispatch();
   const navigate = useNavigate();
+  const { state } = useLocation();
 
   let { user } = useSelector((state) => ({ ...state }));
 
   useEffect(() => {
-    if (user && user.token) navigate("/");
-  }, [user, navigate]);
+    if (user && user.token) {
+      if (state && state.from) {
+        navigate(state.from);
+      } else {
+        navigate("/");
+      }
+    }
+  }, [user, navigate, state]);
 
   const roleBasedRedirect = (res) => {
+    console.log(state);
+
+    if (state && state.from) {
+      navigate(state.from);
+    }
     if (res.data.data === "admin") {
       navigate("admin/dashboard");
     } else {
@@ -51,7 +63,7 @@ const Login = () => {
           });
           toast.success("Login success");
           setLoading(false);
-          navigate("/");
+          roleBasedRedirect();
         })
         .catch((err) => console.log(err));
     } catch (error) {

@@ -5,16 +5,19 @@ import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a lo
 import { Carousel } from "react-responsive-carousel";
 import defaultImage from "../../images/default.png";
 import ProductItems from "./ProductItems";
+import ReactStars from "react-rating-stars-component";
+import RatingModel from "../model/RatingModel";
+import { showAverage } from "../../functions/rating";
 
-const { Meta } = Card;
 const { TabPane } = Tabs;
-const SingleProduct = ({ product }) => {
+const SingleProduct = ({ product, ratingChanged, star }) => {
   const { title, description, images } = product;
+
   return (
     <div className="row">
       <div className="col-md-7">
         {images && images.length ? (
-          <Carousel>
+          <Carousel infiniteLoop autoFocus>
             {images.map((img) => (
               <div key={img.public_id}>
                 <img src={img.url} alt={`${title}_${img.public_id}`} />
@@ -36,6 +39,11 @@ const SingleProduct = ({ product }) => {
         </Tabs>
       </div>
       <div className="col-md-5">
+        <h1 className="bg-info p-2">{title}</h1>
+        {product && product.ratings && product.ratings.length > 0
+          ? showAverage(product)
+          : "No rating yet"}
+
         <Card
           actions={[
             <>
@@ -48,9 +56,23 @@ const SingleProduct = ({ product }) => {
               <br />
               Add to Cart
             </>,
+            <>
+              <RatingModel>
+                <ReactStars
+                  count={5}
+                  size={50}
+                  isHalf={true}
+                  value={star}
+                  emptyIcon={<i className="far fa-star"></i>}
+                  halfIcon={<i className="fa fa-star-half-alt"></i>}
+                  fullIcon={<i className="fa fa-star"></i>}
+                  activeColor="#ffd700"
+                  onChange={ratingChanged}
+                />
+              </RatingModel>
+            </>,
           ]}
         >
-          <Meta title={title} description={description}></Meta>
           <ProductItems product={product}></ProductItems>
         </Card>
       </div>

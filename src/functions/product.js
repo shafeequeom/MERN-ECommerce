@@ -51,3 +51,15 @@ export const getProducts = async (sort, order, page) => {
 export const productsCount = async () => {
   return await axios.get(`${process.env.REACT_APP_API_URL}products/total`);
 };
+
+export const productRating = async (_id, star, authToken) => {
+  return await axios.put(
+    `${process.env.REACT_APP_API_URL}product/rating/${_id}`,
+    { star },
+    {
+      headers: {
+        authToken,
+      },
+    }
+  );
+};
