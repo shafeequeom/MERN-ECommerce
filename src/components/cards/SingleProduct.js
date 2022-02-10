@@ -40,9 +40,11 @@ const SingleProduct = ({ product, ratingChanged, star }) => {
       </div>
       <div className="col-md-5">
         <h1 className="bg-info p-2">{title}</h1>
-        {product && product.ratings && product.ratings.length > 0
-          ? showAverage(product)
-          : "No rating yet"}
+        {product && product.ratings && product.ratings.length > 0 ? (
+          showAverage(product)
+        ) : (
+          <h6 className="text-center">No ratings yet</h6>
+        )}
 
         <Card
           actions={[

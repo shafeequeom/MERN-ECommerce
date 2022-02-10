@@ -63,3 +63,9 @@ export const productRating = async (_id, star, authToken) => {
     }
   );
 };
+
+export const relatedProducts = async (_id) => {
+  return await axios.get(
+    `${process.env.REACT_APP_API_URL}product/related/${_id}`
+  );
+};
