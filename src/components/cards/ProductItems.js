@@ -32,11 +32,11 @@ const ProductItems = ({ product }) => {
       )}
       {subCategories && subCategories.length ? (
         <li className="list-group-item">
-          Category
+          Sub Categories
           {subCategories.map((sub) => (
             <Link
               key={sub._id}
-              to={`subcategories/${sub.slug}`}
+              to={`/subcategories/${sub.slug}`}
               className="label label-default label-pill pull-xs-right"
             >
               {sub ? sub.name : "NA"}

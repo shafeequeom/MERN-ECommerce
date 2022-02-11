@@ -44,3 +44,9 @@ export const removeSubCategory = async (slug, authToken) => {
     }
   );
 };
+
+export const getSubCategoryProducts = async (slug) => {
+  return await axios.get(
+    `${process.env.REACT_APP_API_URL}sub-category/products/${slug}`
+  );
+};

@@ -7,6 +7,7 @@ import ForgetPassword from "../pages/auth/ForgetPassword";
 import Home from "../pages/Home";
 import Product from "../pages/Product";
 import CategoryHome from "../pages/category/CategoryHome";
+import SubCategoryHome from "../pages/category/SubCategoryHome";
 
 import History from "../pages/user/History";
 import Password from "../pages/user/Password";
@@ -26,6 +27,7 @@ const routes = (isLoggedIn, isAdmin) => [
   { path: "/", element: <Home /> },
   { path: "/products/:slug", element: <Product /> },
   { path: "/categories/:slug", element: <CategoryHome /> },
+  { path: "/subcategories/:slug", element: <SubCategoryHome /> },
   { path: "/login", element: <Login /> },
   { path: "/register", element: <Register /> },
   { path: "/forget/password", element: <ForgetPassword /> },
