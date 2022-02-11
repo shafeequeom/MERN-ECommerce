@@ -23,7 +23,7 @@ const ProductItems = ({ product }) => {
         <li className="list-group-item">
           Category
           <Link
-            to={`/category/${category.slug}`}
+            to={`/categories/${category.slug}`}
             className="label label-default label-pill pull-xs-right"
           >
             {category ? category.name : "NA"}
@@ -36,7 +36,7 @@ const ProductItems = ({ product }) => {
           {subCategories.map((sub) => (
             <Link
               key={sub._id}
-              to={`subs/${sub.slug}`}
+              to={`subcategories/${sub.slug}`}
               className="label label-default label-pill pull-xs-right"
             >
               {sub ? sub.name : "NA"}

@@ -44,3 +44,9 @@ export const getCategorySubs = async (_id) => {
     process.env.REACT_APP_API_URL + `category/subs/${_id}`
   );
 };
+
+export const getCategoryProducts = async (slug) => {
+  return await axios.get(
+    `${process.env.REACT_APP_API_URL}category/products/${slug}`
+  );
+};
