@@ -1,17 +1,26 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getProductsByCount, getProductsByFilter } from "../functions/product";
+import { getCategoriesList } from "../functions/category";
 import ProductCard from "../components/cards/ProductCard";
-import { Menu, Slider } from "antd";
-import { DollarOutlined } from "@ant-design/icons";
+import { Collapse, Slider, Checkbox } from "antd";
+import ReactStars from "react-rating-stars-component";
+import {
+  DollarOutlined,
+  CheckSquareOutlined,
+  StarOutlined,
+} from "@ant-design/icons";
 
-const { SubMenu, Item } = Menu;
+const { Panel } = Collapse;
 const Shop = () => {
   let dispatch = useDispatch();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [price, setPrice] = useState([0, 0]);
   const [ok, setOk] = useState(false);
+  const [categories, setCategories] = useState([]);
+  const [categoryCheck, setCategoryCheck] = useState([]);
+  const [star, setStar] = useState(0);
 
   const { search } = useSelector((state) => ({ ...state }));
 
@@ -20,6 +29,7 @@ const Shop = () => {
   //Load pages on default
   useEffect(() => {
     loadAllProducts();
+    loadCategories();
   }, []);
 
   const loadAllProducts = () => {
@@ -30,6 +40,10 @@ const Shop = () => {
     });
   };
 
+  const loadCategories = () => {
+    getCategoriesList().then((res) => setCategories(res.data));
+  };
+
   const searchProducts = (form) => {
     setLoading(true);
     getProductsByFilter(form).then((res) => {
@@ -38,7 +52,7 @@ const Shop = () => {
     });
   };
 
-  //Load Products on user search
+  //2. Load Products on user search
   useEffect(() => {
     const delayed = setTimeout(() => {
       searchProducts({ query: text });
@@ -57,9 +71,61 @@ const Shop = () => {
       payload: { text: "" },
     });
     setPrice(value);
+    setCategoryCheck([]);
     setTimeout(() => {
       setOk(!ok);
     }, 300);
+  };
+
+  //4. Categories based filter
+
+  const showCategories = () => {
+    return (
+      <Checkbox.Group value={categoryCheck} onChange={handleCategoryChange}>
+        {categories.map((c) => (
+          <div className="row pl-3" key={c._id}>
+            <Checkbox value={c._id} name="category">
+              {c.name}
+            </Checkbox>
+          </div>
+        ))}
+      </Checkbox.Group>
+    );
+  };
+
+  const handleCategoryChange = (e) => {
+    dispatch({
+      type: "SEARCH_QUERY",
+      payload: { text: "" },
+    });
+    setPrice([0, 0]);
+    setCategoryCheck(e);
+  };
+
+  useEffect(() => {
+    const delayed = setTimeout(() => {
+      searchProducts({ category: categoryCheck });
+    }, 300);
+    return () => clearTimeout(delayed);
+  }, [categoryCheck]);
+
+  //4. Rating
+
+  useEffect(() => {
+    const delayed = setTimeout(() => {
+      searchProducts({ star: star });
+    }, 300);
+    return () => clearTimeout(delayed);
+  }, [star]);
+
+  const handleRating = (e) => {
+    dispatch({
+      type: "SEARCH_QUERY",
+      payload: { text: "" },
+    });
+    setPrice([0, 0]);
+    setCategoryCheck([]);
+    setStar(e);
   };
 
   return (
@@ -67,9 +133,15 @@ const Shop = () => {
       <div className="row">
         <div className="col-md-3 pt-3">
           <h4>Search / Filter</h4>
-          <hr />
-          <Menu defaultOpenKeys={["1", "2"]} mode="inline">
-            <SubMenu key="1" icon={<DollarOutlined />} title="Price">
+          <Collapse defaultActiveKey={["1", "2"]}>
+            <Panel
+              key="1"
+              header={
+                <>
+                  <DollarOutlined className="mt-1 mr-2" /> Price
+                </>
+              }
+            >
               <>
                 <Slider
                   className="ml-4 mr-4"
@@ -80,8 +152,42 @@ const Shop = () => {
                   max="4999"
                 />
               </>
-            </SubMenu>
-          </Menu>
+            </Panel>
+            <Panel
+              key="2"
+              header={
+                <>
+                  <CheckSquareOutlined className="mt-1 mr-2" /> Category
+                </>
+              }
+            >
+              <>{showCategories()}</>
+            </Panel>
+            <Panel
+              key="3"
+              header={
+                <>
+                  <StarOutlined className="mt-1 mr-2" /> Rating
+                </>
+              }
+            >
+              <>
+                <div className="d-flex justify-content-center align-items-center">
+                  <span>
+                    <ReactStars
+                      count={5}
+                      size={50}
+                      onChange={handleRating}
+                      isHalf={true}
+                      value={star}
+                      activeColor="#ffd700"
+                    />
+                  </span>
+                  <p className="pt-3 ml-3">({star})</p>
+                </div>
+              </>
+            </Panel>
+          </Collapse>
         </div>
         <div className="col-md-9 pt-3">
           {loading ? (
