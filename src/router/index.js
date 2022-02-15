@@ -8,6 +8,7 @@ import Home from "../pages/Home";
 import Product from "../pages/Product";
 import CategoryHome from "../pages/category/CategoryHome";
 import SubCategoryHome from "../pages/category/SubCategoryHome";
+import Shop from "../pages/Shop";
 
 import History from "../pages/user/History";
 import Password from "../pages/user/Password";
@@ -25,6 +26,7 @@ import ProductUpdate from "../pages/admin/product/ProductUpdate";
 const routes = (isLoggedIn, isAdmin) => [
   //Auth
   { path: "/", element: <Home /> },
+  { path: "/shop", element: <Shop /> },
   { path: "/products/:slug", element: <Product /> },
   { path: "/categories/:slug", element: <CategoryHome /> },
   { path: "/subcategories/:slug", element: <SubCategoryHome /> },
