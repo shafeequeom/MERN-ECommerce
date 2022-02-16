@@ -4,12 +4,16 @@ import { getProductsByCount, getProductsByFilter } from "../functions/product";
 import { getCategoriesList } from "../functions/category";
 import { getSubCategoriesList } from "../functions/subCategory";
 import ProductCard from "../components/cards/ProductCard";
-import { Collapse, Slider, Checkbox } from "antd";
+import { Collapse, Slider, Checkbox, Radio } from "antd";
 import ReactStars from "react-rating-stars-component";
 import {
   DollarOutlined,
   CheckSquareOutlined,
   StarOutlined,
+  BgColorsOutlined,
+  BranchesOutlined,
+  DeliveredProcedureOutlined,
+  AppleOutlined,
 } from "@ant-design/icons";
 
 const { Panel } = Collapse;
@@ -24,6 +28,12 @@ const Shop = () => {
   const [star, setStar] = useState(null);
   const [subCategories, setSubCategories] = useState([]);
   const [subCategory, setSubCategory] = useState([]);
+  const [brand, setBrand] = useState("");
+  const [color, setColor] = useState("");
+  const [shipping, setShipping] = useState("");
+
+  const colors = ["Black", "Brown", "Silver", "White", "Blue"];
+  const brands = ["Apple", "Samsung", "Microsoft", "Lenovo", "ASUS"];
 
   const { search } = useSelector((state) => ({ ...state }));
 
@@ -81,6 +91,9 @@ const Shop = () => {
     setPrice(value);
     setCategoryCheck([]);
     setSubCategory("");
+    setBrand("");
+    setColor("");
+    setShipping("");
     setTimeout(() => {
       setOk(!ok);
     }, 300);
@@ -110,6 +123,9 @@ const Shop = () => {
     setPrice([0, 0]);
     setStar(null);
     setSubCategory("");
+    setBrand("");
+    setColor("");
+    setShipping("");
     setCategoryCheck(e);
   };
 
@@ -137,6 +153,9 @@ const Shop = () => {
     setPrice([0, 0]);
     setCategoryCheck([]);
     setSubCategory("");
+    setBrand("");
+    setColor("");
+    setShipping("");
     setStar(e);
   };
 
@@ -165,6 +184,9 @@ const Shop = () => {
     setPrice([0, 0]);
     setCategoryCheck([]);
     setStar(null);
+    setBrand("");
+    setColor("");
+    setShipping("");
     setSubCategory(c._id);
   };
   useEffect(() => {
@@ -173,6 +195,114 @@ const Shop = () => {
     }, 300);
     return () => clearTimeout(delayed);
   }, [subCategory]);
+
+  // Brand
+  const handleBrandChange = (e) => {
+    console.log(e);
+    dispatch({
+      type: "SEARCH_QUERY",
+      payload: { text: "" },
+    });
+    setPrice([0, 0]);
+    setCategoryCheck([]);
+    setStar(null);
+    setColor("");
+    setShipping("");
+    setBrand(e.target.value);
+  };
+
+  const showBrands = () => {
+    return (
+      <Radio.Group value={brand} onChange={handleBrandChange}>
+        {brands.map((b) => (
+          <div className="row pl-3 mb-2" key={b}>
+            <Radio value={b} name="brand">
+              {b}
+            </Radio>
+          </div>
+        ))}
+      </Radio.Group>
+    );
+  };
+
+  useEffect(() => {
+    const delayed = setTimeout(() => {
+      if (brand) searchProducts({ brand });
+    }, 300);
+    return () => clearTimeout(delayed);
+  }, [brand]);
+
+  // 8. Brand
+  const handleColorChange = (e) => {
+    console.log(e);
+    dispatch({
+      type: "SEARCH_QUERY",
+      payload: { text: "" },
+    });
+    setPrice([0, 0]);
+    setCategoryCheck([]);
+    setStar(null);
+    setBrand("");
+    setShipping("");
+    setColor(e.target.value);
+  };
+
+  const showColors = () => {
+    return (
+      <Radio.Group value={color} onChange={handleColorChange}>
+        {colors.map((c) => (
+          <div className="row pl-3 mb-2" key={c}>
+            <Radio value={c} name="brand">
+              {c}
+            </Radio>
+          </div>
+        ))}
+      </Radio.Group>
+    );
+  };
+
+  useEffect(() => {
+    const delayed = setTimeout(() => {
+      if (color) searchProducts({ color });
+    }, 300);
+    return () => clearTimeout(delayed);
+  }, [color]);
+
+  // Shipping
+  // Brand
+  const handleShippingChange = (e) => {
+    console.log(e);
+    dispatch({
+      type: "SEARCH_QUERY",
+      payload: { text: "" },
+    });
+    setPrice([0, 0]);
+    setCategoryCheck([]);
+    setStar(null);
+    setBrand("");
+    setColor("");
+    setShipping(e.target.value);
+  };
+
+  const showShipping = () => {
+    return (
+      <Radio.Group value={shipping} onChange={handleShippingChange}>
+        <Radio value="Yes" name="brand">
+          Yes
+        </Radio>
+        <Radio value="No" name="brand">
+          No
+        </Radio>
+      </Radio.Group>
+    );
+  };
+
+  useEffect(() => {
+    const delayed = setTimeout(() => {
+      if (shipping) searchProducts({ shipping });
+    }, 300);
+    return () => clearTimeout(delayed);
+  }, [shipping]);
 
   return (
     <div className="container-fluid mt-3">
@@ -237,11 +367,41 @@ const Shop = () => {
               key="4"
               header={
                 <>
-                  <CheckSquareOutlined className="mt-1 mr-2" /> Subcategory
+                  <BranchesOutlined className="mt-1 mr-2" /> Subcategory
                 </>
               }
             >
               <>{showSubCategories()}</>
+            </Panel>
+            <Panel
+              key="5"
+              header={
+                <>
+                  <AppleOutlined className="mt-1 mr-2" /> Brands
+                </>
+              }
+            >
+              <>{showBrands()}</>
+            </Panel>
+            <Panel
+              key="6"
+              header={
+                <>
+                  <BgColorsOutlined className="mt-1 mr-2" /> Color
+                </>
+              }
+            >
+              <>{showColors()}</>
+            </Panel>
+            <Panel
+              key="7"
+              header={
+                <>
+                  <DeliveredProcedureOutlined className="mt-1 mr-2" /> Shipping
+                </>
+              }
+            >
+              <>{showShipping()}</>
             </Panel>
           </Collapse>
         </div>
