@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getProductsByCount, getProductsByFilter } from "../functions/product";
 import { getCategoriesList } from "../functions/category";
+import { getSubCategoriesList } from "../functions/subCategory";
 import ProductCard from "../components/cards/ProductCard";
 import { Collapse, Slider, Checkbox } from "antd";
 import ReactStars from "react-rating-stars-component";
@@ -20,7 +21,9 @@ const Shop = () => {
   const [ok, setOk] = useState(false);
   const [categories, setCategories] = useState([]);
   const [categoryCheck, setCategoryCheck] = useState([]);
-  const [star, setStar] = useState(0);
+  const [star, setStar] = useState(null);
+  const [subCategories, setSubCategories] = useState([]);
+  const [subCategory, setSubCategory] = useState([]);
 
   const { search } = useSelector((state) => ({ ...state }));
 
@@ -30,6 +33,7 @@ const Shop = () => {
   useEffect(() => {
     loadAllProducts();
     loadCategories();
+    loadSubCategories();
   }, []);
 
   const loadAllProducts = () => {
@@ -44,6 +48,10 @@ const Shop = () => {
     getCategoriesList().then((res) => setCategories(res.data));
   };
 
+  const loadSubCategories = () => {
+    getSubCategoriesList().then((res) => setSubCategories(res.data));
+  };
+
   const searchProducts = (form) => {
     setLoading(true);
     getProductsByFilter(form).then((res) => {
@@ -55,14 +63,14 @@ const Shop = () => {
   //2. Load Products on user search
   useEffect(() => {
     const delayed = setTimeout(() => {
-      searchProducts({ query: text });
+      if (text) searchProducts({ query: text });
     }, 300);
     return () => clearTimeout(delayed);
   }, [text]);
 
   // 3. load products based on price range
   useEffect(() => {
-    searchProducts({ price });
+    if (price) searchProducts({ price });
   }, [ok]);
 
   const handleSlider = (value) => {
@@ -72,6 +80,7 @@ const Shop = () => {
     });
     setPrice(value);
     setCategoryCheck([]);
+    setSubCategory("");
     setTimeout(() => {
       setOk(!ok);
     }, 300);
@@ -99,12 +108,14 @@ const Shop = () => {
       payload: { text: "" },
     });
     setPrice([0, 0]);
+    setStar(null);
+    setSubCategory("");
     setCategoryCheck(e);
   };
 
   useEffect(() => {
     const delayed = setTimeout(() => {
-      searchProducts({ category: categoryCheck });
+      if (categoryCheck.length) searchProducts({ category: categoryCheck });
     }, 300);
     return () => clearTimeout(delayed);
   }, [categoryCheck]);
@@ -113,7 +124,7 @@ const Shop = () => {
 
   useEffect(() => {
     const delayed = setTimeout(() => {
-      searchProducts({ star: star });
+      if (star) searchProducts({ star: star });
     }, 300);
     return () => clearTimeout(delayed);
   }, [star]);
@@ -125,8 +136,43 @@ const Shop = () => {
     });
     setPrice([0, 0]);
     setCategoryCheck([]);
+    setSubCategory("");
     setStar(e);
   };
+
+  //5.Sub Category
+
+  const showSubCategories = () => {
+    return subCategories.map((c) => (
+      <div
+        className={`p-1 m-1 badge badge-${
+          c._id === subCategory ? "primary" : "secondary"
+        }`}
+        onClick={() => handleSubCategory(c)}
+        style={{ cursor: "pointer" }}
+        key={c._id}
+      >
+        {c.name}
+      </div>
+    ));
+  };
+
+  const handleSubCategory = (c) => {
+    dispatch({
+      type: "SEARCH_QUERY",
+      payload: { text: "" },
+    });
+    setPrice([0, 0]);
+    setCategoryCheck([]);
+    setStar(null);
+    setSubCategory(c._id);
+  };
+  useEffect(() => {
+    const delayed = setTimeout(() => {
+      if (subCategory) searchProducts({ subCategory });
+    }, 300);
+    return () => clearTimeout(delayed);
+  }, [subCategory]);
 
   return (
     <div className="container-fluid mt-3">
@@ -176,7 +222,7 @@ const Shop = () => {
                   <span>
                     <ReactStars
                       count={5}
-                      size={50}
+                      size={40}
                       onChange={handleRating}
                       isHalf={true}
                       value={star}
@@ -186,6 +232,16 @@ const Shop = () => {
                   <p className="pt-3 ml-3">({star})</p>
                 </div>
               </>
+            </Panel>
+            <Panel
+              key="4"
+              header={
+                <>
+                  <CheckSquareOutlined className="mt-1 mr-2" /> Subcategory
+                </>
+              }
+            >
+              <>{showSubCategories()}</>
             </Panel>
           </Collapse>
         </div>
