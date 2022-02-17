@@ -31,6 +31,10 @@ const ProductCard = ({ product }) => {
         type: "ADD_TO_CART",
         payload: unique,
       });
+      dispatch({
+        type: "SET_DRAWER",
+        payload: true,
+      });
     }
   };
   return (

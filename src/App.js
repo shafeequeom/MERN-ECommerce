@@ -15,6 +15,8 @@ import { auth } from "./utils/firebase";
 import { useDispatch, useSelector } from "react-redux";
 import { currentUser } from "./functions/auth";
 
+import SlideDrawer from "./components/drawer/SideDrawer";
+
 const store = createStore(rootReducer, composeWithDevTools());
 
 const App = () => {
@@ -71,6 +73,7 @@ const AppWrapper = () => {
       <Router>
         <Header></Header>
         <ToastContainer />
+        <SlideDrawer />
         <App />
       </Router>
     </Provider>
