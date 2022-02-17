@@ -1,12 +1,38 @@
-import { Card } from "antd";
+import { Card, Tooltip } from "antd";
 import defaultImage from "../../images/default.png";
 import { EyeOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import { showAverage } from "../../functions/rating";
+import _ from "lodash";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 const { Meta } = Card;
 const ProductCard = ({ product }) => {
   const { title, description, images, slug, price } = product;
+  const [tooltip, setTooltip] = useState("Click to add");
+  let dispatch = useDispatch();
+  const { user, cart } = useSelector((state) => ({ ...state }));
+
+  const handelAddToCart = () => {
+    setTooltip("Product added");
+    let cart = [];
+    if (typeof window !== "undefined") {
+      if (localStorage.getItem("cart")) {
+        cart = JSON.parse(localStorage.getItem("cart"));
+      }
+      cart.push({
+        ...product,
+        count: 1,
+      });
+      let unique = _.uniqWith(cart, _.isEqual);
+      localStorage.setItem("cart", JSON.stringify(unique));
+      dispatch({
+        type: "ADD_TO_CART",
+        payload: unique,
+      });
+    }
+  };
   return (
     <>
       {product && product.ratings && product.ratings.length > 0 ? (
@@ -30,9 +56,12 @@ const ProductCard = ({ product }) => {
             <br />
             View Product
           </Link>,
-          <>
-            <ShoppingCartOutlined className="text-danger" /> <br /> Add to Cart
-          </>,
+          <Tooltip title={tooltip}>
+            <span onClick={handelAddToCart}>
+              <ShoppingCartOutlined className="text-danger" /> <br /> Add to
+              Cart
+            </span>
+          </Tooltip>,
         ]}
       >
         EditOul

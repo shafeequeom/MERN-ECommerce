@@ -1,4 +1,4 @@
-import { Card, Tabs } from "antd";
+import { Card, Tabs, Tooltip } from "antd";
 // import { Link } from "react-router-dom";
 import { ShoppingCartOutlined, HeartOutlined } from "@ant-design/icons";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
@@ -8,10 +8,36 @@ import ProductItems from "./ProductItems";
 import ReactStars from "react-rating-stars-component";
 import RatingModel from "../model/RatingModel";
 import { showAverage } from "../../functions/rating";
+import _ from "lodash";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 const { TabPane } = Tabs;
 const SingleProduct = ({ product, ratingChanged, star }) => {
   const { title, description, images } = product;
+  const [tooltip, setTooltip] = useState("Click to add");
+  let dispatch = useDispatch();
+  const { user, cart } = useSelector((state) => ({ ...state }));
+
+  const handelAddToCart = () => {
+    setTooltip("Product added");
+    let cartData = [];
+    if (typeof window !== "undefined") {
+      if (localStorage.getItem("cart")) {
+        cartData = JSON.parse(localStorage.getItem("cart"));
+      }
+      cartData.push({
+        ...product,
+        count: 1,
+      });
+      let unique = _.uniqWith(cart, _.isEqual);
+      localStorage.setItem("cart", JSON.stringify(unique));
+      dispatch({
+        type: "ADD_TO_CART",
+        payload: unique,
+      });
+    }
+  };
 
   return (
     <div className="row">
@@ -48,15 +74,16 @@ const SingleProduct = ({ product, ratingChanged, star }) => {
 
         <Card
           actions={[
-            <>
-              <ShoppingCartOutlined className="text-success" />
-              <br />
-              Add to Cart
-            </>,
+            <Tooltip title={tooltip}>
+              <span onClick={handelAddToCart}>
+                <ShoppingCartOutlined className="text-danger" /> <br /> Add to
+                Cart
+              </span>
+            </Tooltip>,
             <>
               <HeartOutlined className="text-warning" />
               <br />
-              Add to Cart
+              Add to Wishlist
             </>,
             <>
               <RatingModel>

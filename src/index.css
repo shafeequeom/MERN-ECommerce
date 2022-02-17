@@ -3,3 +3,12 @@
     object-fit: cover;
     width: 100%;
 }
+.cart-image {
+    height:120px;
+    width:140px;
+    object-fit: cover;
+}
+
+.pointer{
+    cursor: pointer;
+}

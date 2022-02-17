@@ -29,8 +29,6 @@ const Login = () => {
   }, [user, navigate, state]);
 
   const roleBasedRedirect = (res) => {
-    console.log(state);
-
     if (state && state.from) {
       navigate(state.from);
     }
@@ -63,7 +61,9 @@ const Login = () => {
           });
           toast.success("Login success");
           setLoading(false);
-          roleBasedRedirect();
+          setTimeout(() => {
+            roleBasedRedirect(res);
+          });
         })
         .catch((err) => console.log(err));
     } catch (error) {

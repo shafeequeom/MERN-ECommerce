@@ -9,6 +9,7 @@ import Product from "../pages/Product";
 import CategoryHome from "../pages/category/CategoryHome";
 import SubCategoryHome from "../pages/category/SubCategoryHome";
 import Shop from "../pages/Shop";
+import Cart from "../pages/Cart";
 
 import History from "../pages/user/History";
 import Password from "../pages/user/Password";
@@ -27,6 +28,7 @@ const routes = (isLoggedIn, isAdmin) => [
   //Auth
   { path: "/", element: <Home /> },
   { path: "/shop", element: <Shop /> },
+  { path: "/cart", element: <Cart /> },
   { path: "/products/:slug", element: <Product /> },
   { path: "/categories/:slug", element: <CategoryHome /> },
   { path: "/subcategories/:slug", element: <SubCategoryHome /> },

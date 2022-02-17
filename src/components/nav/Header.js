@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Menu } from "antd";
+import { Menu, Badge } from "antd";
 import {
   SettingOutlined,
   HomeOutlined,
@@ -8,6 +8,7 @@ import {
   LogoutOutlined,
   DashboardOutlined,
   ShoppingOutlined,
+  ShoppingCartOutlined,
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import firebase from "firebase/compat/app";
@@ -23,7 +24,9 @@ const Header = () => {
   const navigate = useNavigate();
 
   let dispatch = useDispatch();
-  let { user } = useSelector((state) => ({ ...state }));
+  let { user, cart } = useSelector((state) => ({ ...state }));
+
+  const rightStyle = { position: "absolute", top: 0, right: 0 };
 
   const handleClick = (e) => {
     setCurrent(e.key);
@@ -47,7 +50,22 @@ const Header = () => {
         <Link to="/shop"> Shopping </Link>
       </Item>
       <Item
-        style={{ marginLeft: "auto", marginTop: "10px" }}
+        style={{ float: "left" }}
+        key="cart"
+        icon={<ShoppingCartOutlined />}
+      >
+        <Link to="/cart">
+          <Badge count={cart.length} offset={[10, 0]}>
+            Cart
+          </Badge>
+        </Link>
+      </Item>
+      <Item
+        style={{
+          marginLeft: "auto",
+          marginTop: "10px",
+          justifyContent: "flex-end",
+        }}
         disabled
         key="search"
         type="text"
@@ -57,8 +75,8 @@ const Header = () => {
 
       {!user && (
         <Item
-          style={{ marginLeft: "auto" }}
           key="register"
+          style={{ justifyContent: "flex-end" }}
           icon={<UserAddOutlined />}
         >
           <Link to="/register"> Register </Link>
@@ -66,11 +84,7 @@ const Header = () => {
       )}
 
       {!user && (
-        <Item
-          style={{ marginLeft: "auto" }}
-          key="login"
-          icon={<UserOutlined />}
-        >
+        <Item style={{}} key="login" icon={<UserOutlined />}>
           <Link to="/login"> Login </Link>
         </Item>
       )}
