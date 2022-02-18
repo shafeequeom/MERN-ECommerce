@@ -80,7 +80,7 @@ const Shop = () => {
 
   // 3. load products based on price range
   useEffect(() => {
-    if (price) searchProducts({ price });
+    if (price && price[0] != 0 && price[1] != 0) searchProducts({ price });
   }, [ok]);
 
   const handleSlider = (value) => {
@@ -191,7 +191,7 @@ const Shop = () => {
   };
   useEffect(() => {
     const delayed = setTimeout(() => {
-      if (subCategory) searchProducts({ subCategory });
+      if (subCategory.length) searchProducts({ subCategory });
     }, 300);
     return () => clearTimeout(delayed);
   }, [subCategory]);

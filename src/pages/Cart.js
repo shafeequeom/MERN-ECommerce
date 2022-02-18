@@ -1,8 +1,8 @@
 import { Button } from "antd";
-import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import ProductCardInCart from "../components/cards/ProductCardInCart";
+import { userCart } from "../functions/user";
 
 const Cart = () => {
   const { user, cart } = useSelector((state) => ({ ...state }));
@@ -16,7 +16,15 @@ const Cart = () => {
     navigate("/login", { state: { from: `/cart` } });
   };
 
-  const saveOrderToDB = () => {};
+  const saveOrderToDB = () => {
+    userCart(user.token, { cart })
+      .then((res) => {
+        if (res.data.ok) navigate("/checkout");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const showCartItems = () => {
     return (
