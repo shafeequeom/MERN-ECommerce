@@ -35,3 +35,15 @@ export const saveAddress = async (authToken, address) => {
     }
   );
 };
+
+export const applyCoupon = async (authToken, coupon) => {
+  return await axios.post(
+    process.env.REACT_APP_API_URL + "user/coupon",
+    { coupon },
+    {
+      headers: {
+        authToken,
+      },
+    }
+  );
+};

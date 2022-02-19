@@ -11,6 +11,7 @@ import SubCategoryHome from "../pages/category/SubCategoryHome";
 import Shop from "../pages/Shop";
 import Cart from "../pages/Cart";
 import Checkout from "../pages/Checkout";
+import Payment from "../pages/Payment";
 
 import History from "../pages/user/History";
 import Password from "../pages/user/Password";
@@ -24,6 +25,7 @@ import SubCategoryUpdate from "../pages/admin/sub/SubCategoryUpdate";
 import ProductCreate from "../pages/admin/product/ProductCreate";
 import AllProducts from "../pages/admin/product/AllProducts";
 import ProductUpdate from "../pages/admin/product/ProductUpdate";
+import CreateCouponPage from "../pages/admin/coupon/CreateCouponPage";
 
 const routes = (isLoggedIn, isAdmin) => [
   //Auth
@@ -31,6 +33,7 @@ const routes = (isLoggedIn, isAdmin) => [
   { path: "/shop", element: <Shop /> },
   { path: "/cart", element: <Cart /> },
   { path: "/checkout", element: <Checkout /> },
+  { path: "/payment", element: <Payment /> },
   { path: "/products/:slug", element: <Product /> },
   { path: "/categories/:slug", element: <CategoryHome /> },
   { path: "/subcategories/:slug", element: <SubCategoryHome /> },
@@ -85,6 +88,10 @@ const routes = (isLoggedIn, isAdmin) => [
   {
     path: "/admin/product/:slug",
     element: isLoggedIn && isAdmin ? <ProductUpdate /> : <Redirection />,
+  },
+  {
+    path: "/admin/coupon",
+    element: isLoggedIn && isAdmin ? <CreateCouponPage /> : <Redirection />,
   },
 ];
 
