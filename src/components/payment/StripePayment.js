@@ -10,6 +10,8 @@ import {
   MoneyCollectOutlined,
 } from "@ant-design/icons";
 import cardImage from "../../images/cards.jpg";
+import { createOrder } from "../../functions/user";
+import { emptyCart } from "../../functions/user";
 
 export const StripePayment = () => {
   let dispatch = useDispatch();
@@ -74,6 +76,22 @@ export const StripePayment = () => {
       setError(`Payment failed: ${payload.error.message}`);
       setProcessing(false);
     } else {
+      createOrder(user.token, payload).then((res) => {
+        if (res.data.ok) {
+          if (typeof window !== "undefined") {
+            dispatch({
+              type: "ADD_TO_CART",
+              payload: [],
+            });
+            dispatch({
+              type: "APPLY_COUPON",
+              payload: false,
+            });
+            localStorage.removeItem("cart");
+            emptyCart(user.token);
+          }
+        }
+      });
       setError(null);
       setSucceeded(true);
     }

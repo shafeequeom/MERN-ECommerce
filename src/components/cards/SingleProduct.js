@@ -11,15 +11,21 @@ import { showAverage } from "../../functions/rating";
 import _ from "lodash";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 const { TabPane } = Tabs;
 const SingleProduct = ({ product, ratingChanged, star }) => {
-  const { title, description, images } = product;
+  const { title, description, images, quantity } = product;
   const [tooltip, setTooltip] = useState("Click to add");
   let dispatch = useDispatch();
   const { user, cart } = useSelector((state) => ({ ...state }));
 
   const handelAddToCart = () => {
+    if (quantity == 0) {
+      setTooltip("Out of stock");
+      toast.error(`${title} is out of stock`);
+      return;
+    }
     setTooltip("Product added");
     let cartData = [];
     if (typeof window !== "undefined") {
@@ -30,7 +36,7 @@ const SingleProduct = ({ product, ratingChanged, star }) => {
         ...product,
         count: 1,
       });
-      let unique = _.uniqWith(cart, _.isEqual);
+      let unique = _.uniqWith(cartData, _.isEqual);
       localStorage.setItem("cart", JSON.stringify(unique));
       dispatch({
         type: "ADD_TO_CART",
@@ -79,10 +85,10 @@ const SingleProduct = ({ product, ratingChanged, star }) => {
         <Card
           actions={[
             <Tooltip title={tooltip}>
-              <span onClick={handelAddToCart}>
-                <ShoppingCartOutlined className="text-danger" /> <br /> Add to
-                Cart
-              </span>
+              <a href="#" onClick={handelAddToCart} disabled={quantity == 0}>
+                <ShoppingCartOutlined className="text-danger" /> <br />
+                {quantity > 0 ? "Add to Cart" : "Out of stock"}
+              </a>
             </Tooltip>,
             <>
               <HeartOutlined className="text-warning" />
