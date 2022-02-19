@@ -4,6 +4,8 @@ import UserNav from "../../components/nav/UserNav";
 import { getUserOrders } from "../../functions/user";
 import { CheckCircleOutlined, CloseCircleOutlined } from "@ant-design/icons";
 import ShowPaymentInfo from "../../components/payment/ShowPaymentInfo";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import Invoice from "../../components/payment/Invoice";
 
 const History = () => {
   const { user } = useSelector((state) => ({ ...state }));
@@ -17,6 +19,16 @@ const History = () => {
   const loadOrders = () => {
     getUserOrders(user.token).then((res) => setOrders(res.data));
   };
+
+  const showDownloadLink = (order) => (
+    <PDFDownloadLink
+      document={<Invoice order={order} />}
+      fileName="invoice.pdf"
+      className="btn btn-sm btn-block btn-outline-primary"
+    >
+      Download PDF
+    </PDFDownloadLink>
+  );
 
   const showOrderIntTable = (order) => (
     <table className="table table-bordered">
@@ -57,9 +69,7 @@ const History = () => {
         <ShowPaymentInfo order={o} />
         {showOrderIntTable(o)}
         <div className="row">
-          <div className="col">
-            <p>PDF</p>
-          </div>
+          <div className="col">{showDownloadLink(o)}</div>
         </div>
       </div>
     ));
