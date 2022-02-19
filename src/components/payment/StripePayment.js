@@ -60,7 +60,6 @@ export const StripePayment = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setProcessing(true);
-    console.log(clientSecret);
 
     const payload = await stripe.confirmCardPayment(clientSecret, {
       payment_method: {
@@ -70,7 +69,6 @@ export const StripePayment = () => {
         },
       },
     });
-    console.log(payload);
 
     if (payload.error) {
       setError(`Payment failed: ${payload.error.message}`);
