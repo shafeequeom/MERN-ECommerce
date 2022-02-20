@@ -12,13 +12,16 @@ import _ from "lodash";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import { addToWishList } from "../../functions/user";
+import { useNavigate } from "react-router-dom";
 
 const { TabPane } = Tabs;
 const SingleProduct = ({ product, ratingChanged, star }) => {
-  const { title, description, images, quantity } = product;
+  const { _id, title, description, images, quantity } = product;
   const [tooltip, setTooltip] = useState("Click to add");
   let dispatch = useDispatch();
-  const { user, cart } = useSelector((state) => ({ ...state }));
+  const { user } = useSelector((state) => ({ ...state }));
+  const navigate = useNavigate();
 
   const handelAddToCart = () => {
     if (quantity == 0) {
@@ -47,6 +50,13 @@ const SingleProduct = ({ product, ratingChanged, star }) => {
         payload: true,
       });
     }
+  };
+
+  const handleAddToWishList = (e) => {
+    e.preventDefault();
+    addToWishList(user.token, _id).then((res) => {
+      navigate("/user/wishlist");
+    });
   };
 
   return (
@@ -90,11 +100,11 @@ const SingleProduct = ({ product, ratingChanged, star }) => {
                 {quantity > 0 ? "Add to Cart" : "Out of stock"}
               </a>
             </Tooltip>,
-            <>
+            <a onClick={handleAddToWishList}>
               <HeartOutlined className="text-warning" />
               <br />
               Add to Wishlist
-            </>,
+            </a>,
             <>
               <RatingModel>
                 <ReactStars
