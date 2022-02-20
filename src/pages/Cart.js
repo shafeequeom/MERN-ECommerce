@@ -1,12 +1,14 @@
-import { Button } from "antd";
+import { Button, Radio } from "antd";
+import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import ProductCardInCart from "../components/cards/ProductCardInCart";
 import { userCart } from "../functions/user";
 
 const Cart = () => {
-  const { user, cart } = useSelector((state) => ({ ...state }));
+  const { user, cart, payment } = useSelector((state) => ({ ...state }));
   let navigate = useNavigate();
+  let dispatch = useDispatch();
 
   const getTotal = () => {
     return cart.reduce((a, b) => a + b.price * b.count, 0);
@@ -24,6 +26,14 @@ const Cart = () => {
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  const handlePaymentChange = (e) => {
+    e.preventDefault();
+    dispatch({
+      type: "PAYMENT_TYPE",
+      payload: e.target.value,
+    });
   };
 
   const showCartItems = () => {
@@ -78,15 +88,25 @@ const Cart = () => {
           ))}
           Total: <b>${getTotal()}</b>
           {user ? (
-            <Button
-              onClick={saveOrderToDB}
-              type="primary"
-              block
-              className="mt-2"
-              disabled={!cart.length}
-            >
-              Proceed to Checkout
-            </Button>
+            <>
+              <Radio.Group
+                className="col p-4"
+                value={payment}
+                onChange={handlePaymentChange}
+              >
+                <Radio value="cod">Cash on Delivery</Radio>
+                <Radio value="online">Card Payment</Radio>
+              </Radio.Group>
+              <Button
+                onClick={saveOrderToDB}
+                type="primary"
+                block
+                className="mt-2"
+                disabled={!cart.length}
+              >
+                Proceed to Checkout
+              </Button>
+            </>
           ) : (
             <Button danger block onClick={gotoLogin}>
               Login to Checkout

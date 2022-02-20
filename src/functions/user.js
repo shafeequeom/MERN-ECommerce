@@ -60,6 +60,18 @@ export const createOrder = async (authToken, stripeResponse) => {
   );
 };
 
+export const createCODOrder = async (authToken, stripeResponse) => {
+  return await axios.post(
+    `${process.env.REACT_APP_API_URL}user/order/cod`,
+    { stripeResponse },
+    {
+      headers: {
+        authToken,
+      },
+    }
+  );
+};
+
 export const getUserOrders = async (authToken) => {
   return await axios.get(`${process.env.REACT_APP_API_URL}user/orders`, {
     headers: {

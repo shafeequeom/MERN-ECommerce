@@ -7,6 +7,7 @@ import {
   emptyCart,
   saveAddress,
   applyCoupon,
+  createCODOrder,
 } from "../functions/user";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
@@ -19,7 +20,7 @@ const Checkout = () => {
   const [totalAfterDiscount, setTotalAfterDiscount] = useState(0);
   const [discountError, setDiscountError] = useState("");
 
-  const { user } = useSelector((state) => ({ ...state }));
+  const { user, payment } = useSelector((state) => ({ ...state }));
   let navigate = useNavigate();
   let dispatch = useDispatch();
 
@@ -134,6 +135,32 @@ const Checkout = () => {
     });
   };
 
+  const handleProceed = () => {
+    if (payment === "online") {
+      navigate("/payment");
+    } else {
+      createCODOrder(user.token).then((res) => {
+        if (res.data.ok) {
+          if (typeof window !== "undefined") {
+            dispatch({
+              type: "ADD_TO_CART",
+              payload: [],
+            });
+            dispatch({
+              type: "APPLY_COUPON",
+              payload: false,
+            });
+            localStorage.removeItem("cart");
+            emptyCart(user.token);
+            setTimeout(() => {
+              navigate("/user/history");
+            }, 1000);
+          }
+        }
+      });
+    }
+  };
+
   return (
     <div className="container-fluid mt-4">
       <div className="row p-4">
@@ -168,7 +195,7 @@ const Checkout = () => {
               <button
                 className="btn btn-primary mt-2"
                 disabled={!address || !products.length}
-                onClick={() => navigate("/payment")}
+                onClick={handleProceed}
               >
                 Place Order
               </button>
