@@ -4,6 +4,7 @@ import OrderTable from "./OrderTable";
 const OrderList = ({ orders, handleOrderStatus }) => {
   const status = [
     "Not Processed",
+    "Cash on Delivery",
     "Processing",
     "Dispatched",
     "Cancelled",
