@@ -56,7 +56,7 @@ const ProductCard = ({ product }) => {
           <img
             src={images && images.length ? images[0].url : defaultImage}
             alt={title}
-            style={{ height: "150px", objectFit: "cover" }}
+            style={{ height: "250px", objectFit: "contain" }}
             className="p-2"
           />
         }

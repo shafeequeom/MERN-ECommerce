@@ -85,7 +85,7 @@ const SingleProduct = ({ product, ratingChanged, star }) => {
         </Tabs>
       </div>
       <div className="col-md-5">
-        <h1 className="bg-info p-2">{title}</h1>
+        <h1 className="p-2">{title}</h1>
         {product && product.ratings && product.ratings.length > 0 ? (
           showAverage(product)
         ) : (
