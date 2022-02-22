@@ -69,7 +69,6 @@ export const StripePayment = () => {
         },
       },
     });
-
     if (payload.error) {
       setError(`Payment failed: ${payload.error.message}`);
       setProcessing(false);

@@ -17,7 +17,7 @@ import { useNavigate } from "react-router-dom";
 
 const { TabPane } = Tabs;
 const SingleProduct = ({ product, ratingChanged, star }) => {
-  const { _id, title, description, images, quantity } = product;
+  const { _id, title, description, slug, images, quantity } = product;
   const [tooltip, setTooltip] = useState("Click to add");
   let dispatch = useDispatch();
   const { user } = useSelector((state) => ({ ...state }));
@@ -54,6 +54,10 @@ const SingleProduct = ({ product, ratingChanged, star }) => {
 
   const handleAddToWishList = (e) => {
     e.preventDefault();
+    if (!user || !user.token) {
+      navigate("/login", { state: { from: `/products/${slug}` } });
+      return;
+    }
     addToWishList(user.token, _id).then((res) => {
       navigate("/user/wishlist");
     });

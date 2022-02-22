@@ -198,7 +198,6 @@ const Shop = () => {
 
   // Brand
   const handleBrandChange = (e) => {
-    console.log(e);
     dispatch({
       type: "SEARCH_QUERY",
       payload: { text: "" },
@@ -234,7 +233,6 @@ const Shop = () => {
 
   // 8. Brand
   const handleColorChange = (e) => {
-    console.log(e);
     dispatch({
       type: "SEARCH_QUERY",
       payload: { text: "" },
@@ -271,7 +269,6 @@ const Shop = () => {
   // Shipping
   // Brand
   const handleShippingChange = (e) => {
-    console.log(e);
     dispatch({
       type: "SEARCH_QUERY",
       payload: { text: "" },

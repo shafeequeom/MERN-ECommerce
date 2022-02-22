@@ -32,7 +32,6 @@ const ImageUpload = ({ value, setValue, setLoading }) => {
                 }
               )
               .then((res) => {
-                console.log(res);
                 uploadedImages.push(res.data);
                 setValue({ ...value, images: uploadedImages });
                 setLoading(false);
@@ -49,7 +48,6 @@ const ImageUpload = ({ value, setValue, setLoading }) => {
   };
 
   const handleImageRemove = (id) => {
-    console.log(id);
     setLoading(true);
     axios
       .post(
@@ -62,7 +60,6 @@ const ImageUpload = ({ value, setValue, setLoading }) => {
         }
       )
       .then((res) => {
-        console.log(res);
         const { images } = value;
         let filteredImages = images.filter((item) => item.public_id !== id);
         setValue({ ...value, images: filteredImages });

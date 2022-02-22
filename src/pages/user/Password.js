@@ -11,7 +11,6 @@ const Password = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(password);
     setLoading(true);
     await auth.currentUser
       .updatePassword(password)

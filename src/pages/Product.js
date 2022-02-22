@@ -56,7 +56,6 @@ export const Product = () => {
       let rating = product.ratings.find(
         (item) => item.postedBy.toString() === user._id.toString()
       );
-      console.log(rating);
       if (rating) setStar(rating.star);
     }
   });

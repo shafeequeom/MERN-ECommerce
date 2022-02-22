@@ -25,7 +25,6 @@ const Checkout = () => {
   let dispatch = useDispatch();
 
   useEffect(() => {
-    console.log(user);
     if (user)
       getUserCart(user.token)
         .then((res) => {

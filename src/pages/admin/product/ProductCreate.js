@@ -78,7 +78,6 @@ const ProductCreate = () => {
   const handleCategoryChange = (e) => {
     e.preventDefault();
     setValue({ ...value, subs: [], [e.target.name]: e.target.value });
-    console.log(value.category);
     loadSubCategories(e.target.value);
   };
 
